@@ -1,11 +1,11 @@
 // Componente de card para exibição dos dados do aluno
 
-import { Student } from '@/types/student';
+import { Student, ClassType } from '@/types/student';
 import { formatPhone, formatPlan } from '@/utils/validation';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Pencil, Trash2, Mail, Phone, Calendar, User } from 'lucide-react';
+import { Pencil, Trash2, Mail, Phone, Calendar, User, Dumbbell, Zap, Heart, Timer, Music, Users } from 'lucide-react';
 
 interface StudentCardProps {
   student: Student;
@@ -20,7 +20,20 @@ const planColors: Record<string, string> = {
   anual: 'bg-accent text-accent-foreground',
 };
 
+// Ícones e labels por tipo de aula
+const classInfo: Record<ClassType, { icon: React.ElementType; label: string }> = {
+  musculacao: { icon: Dumbbell, label: 'Musculação' },
+  spinning: { icon: Zap, label: 'Spinning' },
+  yoga: { icon: Heart, label: 'Yoga' },
+  crossfit: { icon: Timer, label: 'CrossFit' },
+  danca: { icon: Music, label: 'Dança' },
+  funcional: { icon: Users, label: 'Funcional' },
+};
+
 export function StudentCard({ student, onEdit, onDelete }: StudentCardProps) {
+  const classData = student.aula ? classInfo[student.aula] : null;
+  const ClassIcon = classData?.icon;
+
   return (
     <Card className="group hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
       <CardHeader className="pb-3">
@@ -34,9 +47,17 @@ export function StudentCard({ student, onEdit, onDelete }: StudentCardProps) {
             </div>
             <div>
               <h3 className="font-semibold text-lg text-foreground">{student.nome}</h3>
-              <Badge className={planColors[student.plano]}>
-                {formatPlan(student.plano)}
-              </Badge>
+              <div className="flex gap-2 flex-wrap">
+                <Badge className={planColors[student.plano]}>
+                  {formatPlan(student.plano)}
+                </Badge>
+                {classData && (
+                  <Badge variant="outline" className="flex items-center gap-1">
+                    {ClassIcon && <ClassIcon className="h-3 w-3" />}
+                    {classData.label}
+                  </Badge>
+                )}
+              </div>
             </div>
           </div>
           
