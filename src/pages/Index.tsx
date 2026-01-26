@@ -23,6 +23,7 @@ import {
   ArrowLeft 
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { ClassTypes } from '@/components/ClassTypes';
 
 type ViewMode = 'list' | 'form';
 
@@ -184,6 +185,9 @@ const Index = () => {
       <main className="container mx-auto px-4 py-6">
         {viewMode === 'list' ? (
           <>
+            {/* Seção de Tipos de Aulas */}
+            <ClassTypes />
+
             {/* Barra de busca e botão adicionar */}
             {students.length > 0 && (
               <div className="flex flex-col sm:flex-row gap-3 mb-6">
