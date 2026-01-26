@@ -2,6 +2,8 @@
 
 export type Plan = 'mensal' | 'trimestral' | 'anual';
 
+export type ClassType = 'musculacao' | 'spinning' | 'yoga' | 'crossfit' | 'danca' | 'funcional';
+
 export interface Student {
   id: string;
   nome: string;
@@ -9,6 +11,7 @@ export interface Student {
   idade: number;
   telefone: string;
   plano: Plan;
+  aula: ClassType;
   createdAt: string;
 }
 
@@ -18,6 +21,7 @@ export interface StudentFormData {
   idade: string;
   telefone: string;
   plano: Plan;
+  aula: ClassType;
 }
 
 export interface ValidationErrors {
@@ -26,4 +30,5 @@ export interface ValidationErrors {
   idade?: string;
   telefone?: string;
   plano?: string;
+  aula?: string;
 }

@@ -109,6 +109,7 @@ const Index = () => {
           idade: parseInt(data.idade),
           telefone: data.telefone.replace(/\D/g, ''),
           plano: data.plano,
+          aula: data.aula,
         });
         toast.success('Aluno atualizado com sucesso!');
       } else {
@@ -119,6 +120,7 @@ const Index = () => {
           idade: parseInt(data.idade),
           telefone: data.telefone.replace(/\D/g, ''),
           plano: data.plano,
+          aula: data.aula,
         });
         toast.success('Aluno cadastrado com sucesso!');
       }

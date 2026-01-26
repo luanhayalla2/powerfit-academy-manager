@@ -1,14 +1,15 @@
 // Componente de formulário para cadastro/edição de aluno
 
 import { useState, useEffect } from 'react';
-import { Student, StudentFormData, ValidationErrors, Plan } from '@/types/student';
+import { Student, StudentFormData, ValidationErrors, Plan, ClassType } from '@/types/student';
 import { validateStudentForm } from '@/utils/validation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Save, X, Dumbbell } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Save, X, Dumbbell, Zap, Heart, Timer, Music, Users } from 'lucide-react';
 
 interface StudentFormProps {
   student?: Student | null;
@@ -17,12 +18,22 @@ interface StudentFormProps {
   isLoading?: boolean;
 }
 
+const classOptions = [
+  { value: 'musculacao', label: 'Musculação', icon: Dumbbell },
+  { value: 'spinning', label: 'Spinning', icon: Zap },
+  { value: 'yoga', label: 'Yoga', icon: Heart },
+  { value: 'crossfit', label: 'CrossFit', icon: Timer },
+  { value: 'danca', label: 'Dança', icon: Music },
+  { value: 'funcional', label: 'Funcional', icon: Users },
+];
+
 const initialFormData: StudentFormData = {
   nome: '',
   email: '',
   idade: '',
   telefone: '',
   plano: 'mensal',
+  aula: 'musculacao',
 };
 
 export function StudentForm({ student, onSubmit, onCancel, isLoading }: StudentFormProps) {
@@ -39,6 +50,7 @@ export function StudentForm({ student, onSubmit, onCancel, isLoading }: StudentF
         idade: String(student.idade),
         telefone: student.telefone,
         plano: student.plano,
+        aula: student.aula || 'musculacao',
       });
     } else {
       setFormData(initialFormData);
@@ -80,6 +92,7 @@ export function StudentForm({ student, onSubmit, onCancel, isLoading }: StudentF
       idade: true,
       telefone: true,
       plano: true,
+      aula: true,
     });
     
     // Se não houver erros, enviar
@@ -176,6 +189,35 @@ export function StudentForm({ student, onSubmit, onCancel, isLoading }: StudentF
                 <p className="text-sm text-destructive">{errors.telefone}</p>
               )}
             </div>
+          </div>
+
+          {/* Tipo de Aula */}
+          <div className="space-y-2">
+            <Label>Tipo de Aula</Label>
+            <Select
+              value={formData.aula}
+              onValueChange={(value) => handleChange('aula', value as ClassType)}
+            >
+              <SelectTrigger className={errors.aula ? 'border-destructive' : ''}>
+                <SelectValue placeholder="Selecione uma aula" />
+              </SelectTrigger>
+              <SelectContent>
+                {classOptions.map((option) => {
+                  const Icon = option.icon;
+                  return (
+                    <SelectItem key={option.value} value={option.value}>
+                      <div className="flex items-center gap-2">
+                        <Icon className="h-4 w-4" />
+                        <span>{option.label}</span>
+                      </div>
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+            {errors.aula && (
+              <p className="text-sm text-destructive">{errors.aula}</p>
+            )}
           </div>
 
           {/* Plano */}
