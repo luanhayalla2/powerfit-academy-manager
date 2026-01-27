@@ -20,10 +20,19 @@ import {
   Dumbbell, 
   Users, 
   Search,
-  ArrowLeft 
+  ArrowLeft,
+  Filter
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { ClassTypes } from '@/components/ClassTypes';
+import { ClassType } from '@/types/student';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 type ViewMode = 'list' | 'form';
 
@@ -32,6 +41,7 @@ const Index = () => {
   const [students, setStudents] = useState<Student[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [classFilter, setClassFilter] = useState<ClassType | 'all'>('all');
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [deletingStudent, setDeletingStudent] = useState<Student | null>(null);
@@ -42,22 +52,28 @@ const Index = () => {
     loadStudents();
   }, []);
 
-  // Filtrar alunos quando busca ou lista mudar
+  // Filtrar alunos quando busca, filtro de aula ou lista mudar
   useEffect(() => {
+    let result = students;
+    
+    // Filtrar por tipo de aula
+    if (classFilter !== 'all') {
+      result = result.filter(s => s.aula === classFilter);
+    }
+    
+    // Filtrar por termo de busca
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase();
-      setFilteredStudents(
-        students.filter(
-          s => 
-            s.nome.toLowerCase().includes(term) ||
-            s.email.toLowerCase().includes(term) ||
-            s.telefone.includes(term)
-        )
+      result = result.filter(
+        s => 
+          s.nome.toLowerCase().includes(term) ||
+          s.email.toLowerCase().includes(term) ||
+          s.telefone.includes(term)
       );
-    } else {
-      setFilteredStudents(students);
     }
-  }, [students, searchTerm]);
+    
+    setFilteredStudents(result);
+  }, [students, searchTerm, classFilter]);
 
   // Carregar lista de alunos
   const loadStudents = () => {
@@ -190,7 +206,7 @@ const Index = () => {
             {/* Seção de Tipos de Aulas */}
             <ClassTypes />
 
-            {/* Barra de busca e botão adicionar */}
+            {/* Barra de busca, filtro e botão adicionar */}
             {students.length > 0 && (
               <div className="flex flex-col sm:flex-row gap-3 mb-6">
                 <div className="relative flex-1">
@@ -202,6 +218,21 @@ const Index = () => {
                     className="pl-10"
                   />
                 </div>
+                <Select value={classFilter} onValueChange={(value) => setClassFilter(value as ClassType | 'all')}>
+                  <SelectTrigger className="w-full sm:w-[180px]">
+                    <Filter className="h-4 w-4 mr-2" />
+                    <SelectValue placeholder="Filtrar por aula" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todas as aulas</SelectItem>
+                    <SelectItem value="musculacao">Musculação</SelectItem>
+                    <SelectItem value="spinning">Spinning</SelectItem>
+                    <SelectItem value="yoga">Yoga</SelectItem>
+                    <SelectItem value="crossfit">CrossFit</SelectItem>
+                    <SelectItem value="danca">Dança</SelectItem>
+                    <SelectItem value="funcional">Funcional</SelectItem>
+                  </SelectContent>
+                </Select>
                 <Button onClick={handleAddNew} className="shrink-0">
                   <Plus className="h-4 w-4 mr-2" />
                   Novo Aluno
