@@ -22,6 +22,7 @@ interface ClassType {
   nome: string;
   descricao: string;
   duracao: string;
+  capacidadeMaxima: number;
   icon: React.ElementType;
   horarios: ClassSchedule[];
 }
@@ -32,6 +33,7 @@ const classTypes: ClassType[] = [
     nome: 'Musculação',
     descricao: 'Treino de força com equipamentos modernos',
     duracao: '60 min',
+    capacidadeMaxima: 30,
     icon: Dumbbell,
     horarios: [
       { dia: 'Seg-Sex', horarios: ['06:00', '08:00', '10:00', '14:00', '16:00', '18:00', '20:00'] },
@@ -43,6 +45,7 @@ const classTypes: ClassType[] = [
     nome: 'Spinning',
     descricao: 'Aula intensa de ciclismo indoor',
     duracao: '45 min',
+    capacidadeMaxima: 20,
     icon: Zap,
     horarios: [
       { dia: 'Seg-Qua-Sex', horarios: ['07:00', '18:00', '19:00'] },
@@ -54,6 +57,7 @@ const classTypes: ClassType[] = [
     nome: 'Yoga',
     descricao: 'Relaxamento e flexibilidade corporal',
     duracao: '60 min',
+    capacidadeMaxima: 15,
     icon: Heart,
     horarios: [
       { dia: 'Seg-Qua-Sex', horarios: ['07:00', '09:00', '19:00'] },
@@ -65,6 +69,7 @@ const classTypes: ClassType[] = [
     nome: 'CrossFit',
     descricao: 'Treino funcional de alta intensidade',
     duracao: '50 min',
+    capacidadeMaxima: 18,
     icon: Timer,
     horarios: [
       { dia: 'Seg-Qua-Sex', horarios: ['06:00', '07:00', '17:00', '18:00', '19:00'] },
@@ -77,6 +82,7 @@ const classTypes: ClassType[] = [
     nome: 'Dança',
     descricao: 'Aulas de zumba e ritmos variados',
     duracao: '45 min',
+    capacidadeMaxima: 25,
     icon: Music,
     horarios: [
       { dia: 'Ter-Qui', horarios: ['10:00', '18:00', '19:00'] },
@@ -88,6 +94,7 @@ const classTypes: ClassType[] = [
     nome: 'Funcional',
     descricao: 'Treino em grupo com exercícios funcionais',
     duracao: '45 min',
+    capacidadeMaxima: 16,
     icon: Users,
     horarios: [
       { dia: 'Seg-Qua-Sex', horarios: ['06:30', '08:00', '17:00', '18:30'] },
@@ -124,9 +131,14 @@ export function ClassTypes() {
                     <p className="text-xs text-muted-foreground">
                       {classType.descricao}
                     </p>
-                    <Badge variant="secondary" className="mt-1 text-xs">
-                      {classType.duracao}
-                    </Badge>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Badge variant="secondary" className="text-xs">
+                        {classType.duracao}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs">
+                        Máx: {classType.capacidadeMaxima} alunos
+                      </Badge>
+                    </div>
                   </div>
                 </div>
                 
